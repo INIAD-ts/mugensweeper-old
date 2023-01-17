@@ -1,7 +1,9 @@
 import { Button, Space } from '@mantine/core'
-import { GithubIcon } from '@mantine/ds'
+import { GithubIcon,TwitterIcon } from '@mantine/ds'
 import { staticPath } from 'src/utils/$path'
 import { loginWithGitHub } from 'src/utils/loginWithGitHub'
+import { loginWithGoogle } from 'src/utils/loginWithGoogle'
+import { loginWithTwitter } from 'src/utils/loginWithTwitter'
 
 const Login = () => {
   return (
@@ -41,6 +43,31 @@ const Login = () => {
           onClick={loginWithGitHub}
         >
           Login with GitHub
+        </Button>
+        <Button
+          leftIcon={<TwitterIcon size={16} />}
+          sx={(theme) => ({
+            backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            color: '#fff',
+            '&:hover': {
+              backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            },
+          })}
+          onClick={loginWithTwitter}
+         >
+          Login with Twitter
+        </Button>
+        <Button
+          sx={(theme) => ({
+            backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            color: '#fff',
+            '&:hover': {
+              backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            },
+          })}
+          onClick={loginWithGoogle}
+         >
+          Login with Google
         </Button>
       </div>
     </div>
