@@ -19,4 +19,8 @@ export const UserRepository = {
         },
       })
       .then(userModelUtil.create),
+  findByUserId: (userid: string): Promise<UserModel | null> =>
+    getPrismaClient()
+      .user.findUnique({ where: { userid } })
+      .then((user) => user && userModelUtil.create(user)),
 }
