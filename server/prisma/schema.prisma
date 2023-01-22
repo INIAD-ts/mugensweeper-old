@@ -13,3 +13,10 @@ model Task {
   label     String
   done      Boolean  @default(false)
 }
+
+model User {
+  userid      String   @id
+  displayName String
+  photoUrl    String
+  createAt    DateTime @default(now())
+}
