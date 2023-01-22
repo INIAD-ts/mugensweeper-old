@@ -8,4 +8,5 @@ export const UserUsecase = {
 
     return newUser
   },
+  findByUserId: (userId: string) => UserRepository.findByUserId(userId),
 }

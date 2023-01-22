@@ -2,7 +2,7 @@ import { getPrismaClient } from '$/service/getPrismaClient'
 import type { UserModel } from '../UserModel'
 import { userModelUtil } from '../UserModel'
 export const UserRepository = {
-  save: (user: UserModel) =>
+  save: (user: UserModel): Promise<UserModel> =>
     getPrismaClient()
       .user.upsert({
         where: { userId: user.userId },
@@ -18,4 +18,8 @@ export const UserRepository = {
         },
       })
       .then(userModelUtil.create),
+  findByUserId: (userId: string): Promise<UserModel | null> =>
+    getPrismaClient()
+      .user.findUnique({ where: { userId } })
+      .then((user) => user && userModelUtil.create(user)),
 }
