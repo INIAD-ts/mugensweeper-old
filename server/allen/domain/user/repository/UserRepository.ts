@@ -6,21 +6,21 @@ export const UserRepository = {
   save: (user: UserModel): Promise<UserModel> =>
     getPrismaClient()
       .user.upsert({
-        where: { userid: user.userid },
+        where: { userId: user.userId },
         update: {
-          userid: user.userid,
+          userId: user.userId,
           displayName: user.displayName,
           photoUrl: user.photoUrl,
         },
         create: {
-          userid: user.userid,
+          userId: user.userId,
           displayName: user.displayName,
           photoUrl: user.photoUrl,
         },
       })
       .then(userModelUtil.create),
-  findByUserId: (userid: string): Promise<UserModel | null> =>
+  findByUserId: (userId: string): Promise<UserModel | null> =>
     getPrismaClient()
-      .user.findUnique({ where: { userid } })
+      .user.findUnique({ where: { userId } })
       .then((user) => user && userModelUtil.create(user)),
 }

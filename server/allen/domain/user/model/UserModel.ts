@@ -1,18 +1,18 @@
-import type { Userid } from '$/types/branded'
+import type { UserId } from '$/types/branded'
 import { z } from 'zod'
 
 export type UserModel = {
-  userid: Userid
+  userId: UserId
   displayName: string
   photoUrl: string
 }
 
 export const userModelUtil = {
-  create: (values: { userid: string; displayName: string; photoUrl: string }): UserModel => {
+  create: (values: { userId: string; displayName: string; photoUrl: string }): UserModel => {
     {
       const newUser: UserModel = {
         //userIdをUserId型に買える
-        userid: z.string().brand('Userid').parse(values.userid),
+        userId: z.string().brand('UserId').parse(values.userId),
         displayName: values.displayName,
         photoUrl: values.photoUrl,
       }

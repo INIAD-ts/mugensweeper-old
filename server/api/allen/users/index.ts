@@ -7,7 +7,7 @@ export type Methods = {
 
   post: {
     reqBody: {
-      userid: string
+      userId: string
       displayName: string
       photoUrl: string
     }

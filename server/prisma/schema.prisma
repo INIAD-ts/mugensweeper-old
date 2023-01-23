@@ -15,8 +15,24 @@ model Task {
 }
 
 model User {
-  userid      String   @id
-  displayName String
-  photoUrl    String
-  createAt    DateTime @default(now())
+  userId       String         @id
+  displayName  String
+  photoUrl     String
+  createAt     DateTime       @default(now())
+  ClickHistory ClickHistory[]
+}
+
+enum MouseBtn {
+  left
+  right
+}
+
+model ClickHistory {
+  clickHistoryId Int      @id
+  user           User?    @relation(fields: [userId], references: [userId])
+  userId         String?
+  createAt       DateTime
+  mouseBtn       MouseBtn
+  posX           Int
+  posY           Int
 }
