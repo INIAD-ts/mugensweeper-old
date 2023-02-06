@@ -10,6 +10,7 @@
       "$/*": ["./*"],
       "$prisma/*": ["./node_modules/.prisma/*"]
     },
+    "types": ["vitest/importMeta"],
     "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
