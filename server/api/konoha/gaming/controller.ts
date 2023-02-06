@@ -1,4 +1,5 @@
 import { ClickHistoryUseCase } from '$/konoha/domain/gaming/usecase/ClickHistoryUsecase'
+import { parseUserId } from '$/types/parseBranded'
 import { z } from 'zod'
 import { defineController } from './$relay'
 
@@ -14,7 +15,7 @@ export default defineController(() => ({
     },
     handler: async ({ body }) => {
       const clickHistories = await ClickHistoryUseCase.clickBoard({
-        userId: z.string().brand('UserId').parse(body.userId),
+        userId: parseUserId(body.userId),
         mouseBtn: body.mouseBtn,
         pos: body.pos,
       })
