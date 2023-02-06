@@ -1,7 +1,7 @@
-import type { Board, Bomb } from '.'
+import type { Board } from '.'
 import { defineController } from './$relay'
 
-const bombs: Bomb[] = [{ type: 'bomb', pos: { x: 1, y: 0 } }]
+//const bombs: Bomb[] = [{ type: 'bomb', pos: { x: 1, y: 0 } }]
 
 const board: Board = {
   type: 'board',
