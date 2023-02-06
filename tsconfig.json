@@ -7,6 +7,7 @@
       "$/*": ["./server/*"],
       "$prisma/*": ["./server/node_modules/.prisma/*"]
     },
+    "types": ["vitest/importMeta"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
