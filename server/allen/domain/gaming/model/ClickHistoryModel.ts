@@ -1,8 +1,9 @@
-import type { ClickHistoryId, UserId } from 'types/branded'
+import type { ClickHistoryId, UserId } from '$/types/branded'
 import { z } from 'zod'
 import type { Pos } from '../valueObject/Pos'
 
 export type MouseBtn = 'left' | 'right'
+
 export type ClickHistoryModel = {
   clickHistoryId: ClickHistoryId
   userId: UserId
@@ -20,6 +21,7 @@ export const clickHistoryModelUtil = {
       createdAt: Date.now(),
       mouseBtn: values.mouseBtn,
     }
+
     return newClickHistory
   },
 }
