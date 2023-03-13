@@ -1,4 +1,4 @@
-import type { Board, Bomb, Cell, Pos } from '$/api/allen/index'
+import type { Board, Bomb, Cell, Pos } from 'api/allen/index'
 
 const bombs: Bomb[] = [{ type: 'bomb', pos: { x: 1, y: 0 } }]
 

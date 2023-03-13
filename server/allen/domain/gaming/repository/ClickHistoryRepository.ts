@@ -1,4 +1,4 @@
-import { getPrismaClient } from '$/service/getPrismaClient'
+import { getPrismaClient } from 'service/getPrismaClient'
 import { z } from 'zod'
 import type { ClickHistoryModel } from '../model/ClickHistoryModel'
 

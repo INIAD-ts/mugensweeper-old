@@ -1,4 +1,4 @@
-import type { ClickHistoryId, UserId } from '$/types/branded'
+import type { ClickHistoryId, UserId } from 'types/branded'
 import { z } from 'zod'
 import type { Pos } from '../valueObject/Pos'
 

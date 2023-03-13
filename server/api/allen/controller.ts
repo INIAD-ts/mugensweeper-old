@@ -1,4 +1,4 @@
-import { clickCell, getBoard } from '$/service/allen/clickCell'
+import { clickCell, getBoard } from 'service/allen/clickCell'
 import { defineController } from './$relay'
 
 export default defineController(() => ({

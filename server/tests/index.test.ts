@@ -1,5 +1,5 @@
-import type { UserData } from '$/service/findUsers'
-import { findUsers } from '$/service/findUsers'
+import type { UserData } from 'service/findUsers'
+import { findUsers } from 'service/findUsers'
 import { expect, test } from 'vitest'
 
 test('default', () => {
