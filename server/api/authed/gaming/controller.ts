@@ -1,5 +1,5 @@
+import { ClickHistoryUsecase } from '$/domain/gaming/usecase/ClickHistoryUsecase'
 import { parseUserId } from '$/types/parseBranded'
-import { ClickHistoryUsecase } from 'allen/domain/gaming/usecase/ClickHistoryUsecase'
 import { z } from 'zod'
 import { defineController } from './$relay'
 

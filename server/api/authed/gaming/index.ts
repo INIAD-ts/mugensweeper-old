@@ -1,5 +1,5 @@
-import type { ClickHistoryModel, MouseBtn } from '$/allen/domain/gaming/model/ClickHistoryModel'
-import type { Pos } from '$/allen/domain/gaming/valueObject/Pos'
+import type { ClickHistoryModel, MouseBtn } from '$/domain/gaming/model/ClickHistoryModel'
+import type { Pos } from '$/domain/gaming/valueObject/Pos'
 
 export type Methods = {
   get: {

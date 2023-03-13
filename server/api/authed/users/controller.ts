@@ -1,4 +1,4 @@
-import { UserUsecase } from '$/allen/domain/user/usecase/UserUsecase'
+import { UserUsecase } from '$/domain/user/usecase/UserUsecase'
 import { z } from 'zod'
 import { defineController } from './$relay'
 

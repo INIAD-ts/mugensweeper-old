@@ -1,4 +1,4 @@
-import type { UserModel } from '$/allen/domain/user/model/UserModel'
+import type { UserModel } from '$/domain/user/model/UserModel'
 
 export type Methods = {
   get: {
