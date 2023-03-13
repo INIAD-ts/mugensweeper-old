@@ -1,24 +1,24 @@
 import type { ClickHistoryId, UserId } from '$/types/branded'
-import { z } from 'zod'
+import { ClickHistoryIdParser, userIdParser } from '$/types/parseBranded'
 import type { Pos } from '../valueObject/Pos'
 
 export type MouseBtn = 'left' | 'right'
 
 export type ClickHistoryModel = {
-  clickHistoryId: ClickHistoryId
+  ClickHistoryId: ClickHistoryId
   userId: UserId
   pos: Pos
   createdAt: number
   mouseBtn: MouseBtn
 }
 
-type CreationParams = { clickHistoryId: number; userId: string; pos: Pos; mouseBtn: MouseBtn }
+type CreationParams = { ClickHistoryId: number; userId: string; pos: Pos; mouseBtn: MouseBtn }
 
-export const clickHistoryModelUtil = {
-  create: (values: { clickHistoryId: number; userId: string; pos: Pos; mouseBtn: MouseBtn }) => {
+export const ClickHistoryModelUtil = {
+  create: (values: { ClickHistoryId: number; userId: string; pos: Pos; mouseBtn: MouseBtn }) => {
     const newClickHistory: ClickHistoryModel = {
-      clickHistoryId: z.number().int().brand('ClickHistoryId').parse(values.clickHistoryId),
-      userId: z.string().brand('UserId').parse(values.userId),
+      ClickHistoryId: ClickHistoryIdParser.brand('ClickHistoryId').parse(values.ClickHistoryId),
+      userId: userIdParser.parse(values.userId),
       pos: values.pos,
       createdAt: Date.now(),
       mouseBtn: values.mouseBtn,
@@ -27,7 +27,7 @@ export const clickHistoryModelUtil = {
     return newClickHistory
   },
   createIfUnique: (
-    params: Omit<CreationParams, 'clickHistoryId'>,
+    params: Omit<CreationParams, 'ClickHistoryId'>,
     models: ClickHistoryModel[]
   ): { result: 'success'; model: ClickHistoryModel } | { result: 'faillure'; model: null } => {
     const IsUniquePos = models.every(
@@ -36,7 +36,7 @@ export const clickHistoryModelUtil = {
     return IsUniquePos
       ? {
           result: 'success',
-          model: clickHistoryModelUtil.create({ ...params, clickHistoryId: models.length + 1 }),
+          model: ClickHistoryModelUtil.create({ ...params, ClickHistoryId: models.length + 1 }),
         }
       : { result: 'faillure', model: null }
   },

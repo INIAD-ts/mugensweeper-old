@@ -1,5 +1,5 @@
 import type { UserId } from '$/types/branded'
-import { z } from 'zod'
+import { userIdParser } from '$/types/parseBranded'
 
 export type UserModel = {
   userId: UserId
@@ -12,7 +12,7 @@ export const userModelUtil = {
     {
       const newUser: UserModel = {
         //userIdをUserId型に買える
-        userId: z.string().brand('UserId').parse(values.userId),
+        userId: userIdParser.parse(values.userId),
         displayName: values.displayName,
         photoUrl: values.photoUrl,
       }

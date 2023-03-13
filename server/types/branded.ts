@@ -6,3 +6,5 @@ type BrandedNumber<T extends string> = number & z.BRAND<T>
 export type UserId = BrandedString<'UserId'>
 
 export type ClickHistoryId = BrandedNumber<'ClickHistoryId'>
+
+export type TriedEmbedId = BrandedNumber<'TriedEmbedId'>

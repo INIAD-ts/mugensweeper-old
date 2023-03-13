@@ -1,36 +1,36 @@
+import { ClickHistoryIdParser, userIdParser } from '$/types/parseBranded'
 import { getPrismaClient } from 'service/getPrismaClient'
-import { z } from 'zod'
 import type { ClickHistoryModel } from '../model/ClickHistoryModel'
 
 export const ClickHistoryRepository = {
   getAllCount: () => getPrismaClient().clickHistory.count(),
   findAll: () =>
     getPrismaClient()
-      .clickHistory.findMany()
+      .clickHistory.findMany({ orderBy: { ClickHistoryId: 'asc' } })
       .then((data): ClickHistoryModel[] =>
         data.map((d) => ({
-          clickHistoryId: z.number().brand('ClickHistoryId').parse(d.clickHistoryId),
-          userId: z.string().brand('UserId').parse(d.userId),
+          ClickHistoryId: ClickHistoryIdParser.brand('ClickHistoryId').parse(d.ClickHistoryId),
+          userId: userIdParser.parse(d.userId),
           pos: { x: d.posX, y: d.posY },
           createdAt: d.createAt.getTime(),
           mouseBtn: d.mouseBtn,
         }))
       ),
 
-  save: async (clickHistory: ClickHistoryModel): Promise<void> => {
+  save: async (ClickHistory: ClickHistoryModel): Promise<void> => {
     await getPrismaClient().clickHistory.upsert({
-      where: { clickHistoryId: clickHistory.clickHistoryId },
+      where: { ClickHistoryId: ClickHistory.ClickHistoryId },
       update: {
-        userId: clickHistory.userId,
-        mouseBtn: clickHistory.mouseBtn,
+        userId: ClickHistory.userId,
+        mouseBtn: ClickHistory.mouseBtn,
       },
       create: {
-        clickHistoryId: clickHistory.clickHistoryId,
-        userId: clickHistory.userId,
-        createAt: new Date(clickHistory.createdAt),
-        mouseBtn: clickHistory.mouseBtn,
-        posX: clickHistory.pos.x,
-        posY: clickHistory.pos.y,
+        ClickHistoryId: ClickHistory.ClickHistoryId,
+        userId: ClickHistory.userId,
+        createAt: new Date(ClickHistory.createdAt),
+        mouseBtn: ClickHistory.mouseBtn,
+        posX: ClickHistory.pos.x,
+        posY: ClickHistory.pos.y,
       },
     })
   },

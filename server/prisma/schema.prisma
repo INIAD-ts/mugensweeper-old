@@ -28,11 +28,19 @@ enum MouseBtn {
 }
 
 model ClickHistory {
-  clickHistoryId Int      @id
+  ClickHistoryId Int      @id
   user           User?    @relation(fields: [userId], references: [userId])
   userId         String?
   createAt       DateTime
   mouseBtn       MouseBtn
   posX           Int
   posY           Int
+}
+
+model TriedEmbed {
+  id        Int      @id
+  posX      Int
+  posY      Int
+  hasBomb   Boolean
+  createdAt DateTime
 }

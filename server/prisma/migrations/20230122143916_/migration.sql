@@ -13,14 +13,14 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "ClickHistory" (
-    "clickHistoryId" INTEGER NOT NULL,
+    "ClickHistoryId" INTEGER NOT NULL,
     "userId" TEXT,
     "createAt" TIMESTAMP(3) NOT NULL,
     "mouseBtn" "MouseBtn" NOT NULL,
     "posX" INTEGER NOT NULL,
     "posY" INTEGER NOT NULL,
 
-    CONSTRAINT "ClickHistory_pkey" PRIMARY KEY ("clickHistoryId")
+    CONSTRAINT "ClickHistory_pkey" PRIMARY KEY ("ClickHistoryId")
 );
 
 -- AddForeignKey

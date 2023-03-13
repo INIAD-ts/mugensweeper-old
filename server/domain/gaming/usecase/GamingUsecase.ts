@@ -1,11 +1,13 @@
 import { getPrismaClient } from 'service/getPrismaClient'
 import type { UserId } from 'types/branded'
 import type { ClickHistoryModel, MouseBtn } from '../model/ClickHistoryModel'
-import { clickHistoryModelUtil } from '../model/ClickHistoryModel'
+import { ClickHistoryModelUtil } from '../model/ClickHistoryModel'
+import { triedEmbedModelUtil } from '../model/TriedEmbedModel'
 import { ClickHistoryRepository } from '../repository/ClickHistoryRepository'
+import { TriedEmbedRepository } from '../repository/TriedEmbedRepository'
 import type { Pos } from '../valueObject/Pos'
 
-export const ClickHistoryUsecase = {
+export const GamingUseCase = {
   clickBoard: (values: {
     userId: UserId
     mouseBtn: MouseBtn
@@ -14,7 +16,7 @@ export const ClickHistoryUsecase = {
     getPrismaClient().$transaction(async () => {
       const models = await ClickHistoryRepository.findAll()
       //歴史を作成している
-      const result = clickHistoryModelUtil.createIfUnique(
+      const result = ClickHistoryModelUtil.createIfUnique(
         {
           userId: values.userId,
           pos: values.pos,
@@ -24,7 +26,16 @@ export const ClickHistoryUsecase = {
       )
 
       if (result.result === 'success') {
-        await ClickHistoryRepository.save(result.model)
+        const existingModels = await TriedEmbedRepository.findAll()
+        const triedEmbedModels = triedEmbedModelUtil.createAroundPos(
+          result.model.pos,
+          existingModels
+        )
+
+        await Promise.all([
+          ClickHistoryRepository.save(result.model),
+          ...triedEmbedModels.map(TriedEmbedRepository.save),
+        ])
         return result.model
       }
       //Repository = database
