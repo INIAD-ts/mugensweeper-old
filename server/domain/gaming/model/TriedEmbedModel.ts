@@ -23,13 +23,17 @@ export const triedEmbedModelUtil = {
     hasBomb: params.hasBomb,
     createdAt: Date.now(),
   }),
-  createAroundPos: (pos: Pos, models: TriedEmbedModel[]): TriedEmbedModel[] => {
-    return aroundDirections.map(([x, y], i) =>
-      triedEmbedModelUtil.create({
-        triedEmbedId: models.length + 1 + i,
-        pos: { x: pos.x + x, y: pos.y + y },
-        hasBomb: Math.floor(Math.random() * 100) < BOMB_BORN_RATIO,
-      })
-    )
+  createAroundPos: (pos: Pos, allExistingmodels: TriedEmbedModel[]): TriedEmbedModel[] => {
+    return aroundDirections
+      .map(([x, y], i) =>
+        triedEmbedModelUtil.create({
+          triedEmbedId: allExistingmodels.length + 1 + i,
+          pos: { x: pos.x + x, y: pos.y + y },
+          hasBomb: Math.floor(Math.random() * 100) < BOMB_BORN_RATIO,
+        })
+      )
+      .filter((model) =>
+        allExistingmodels.every((m) => m.pos.x !== model.pos.x || m.pos.y !== model.pos.y)
+      )
   },
 }

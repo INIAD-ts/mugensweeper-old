@@ -43,9 +43,7 @@ const expectToEqualTriedEmbedModels = (result: TriedEmbedModel[], expected: Trie
 
 test('クリックした履歴を取得できるかテスト', async () => {
   //前提条件として悪意の攻撃と正当なリクエスト
-  console.log(1)
   const userTaro = await registerUser('太郎')
-  console.log(2)
   const userInputList: userInput = [
     { userId: userTaro.userId, mouseBtn: 'left', pos: { x: 1, y: 1 } },
     { userId: userTaro.userId, mouseBtn: 'left', pos: { x: 3, y: 2 } },
@@ -82,13 +80,14 @@ test('クリックした履歴を取得できるかテスト', async () => {
       pos: { x: x + userInputList[1].pos.x, y: y + userInputList[1].pos.y },
       createdAt: expect.any(Number),
     })),
-  ]
+  ].filter(
+    (model, i, arr) =>
+      i === arr.findIndex((m) => m.pos.x === model.pos.x && m.pos.y === model.pos.y)
+  )
 
   //実行
   for (const input of userInputList) {
-    console.log(3)
     await GamingUseCase.clickBoard(input)
-    console.log(4)
   }
   const result1 = await ClickHistoryRepository.findAll()
   const result2 = await TriedEmbedRepository.findAll()
