@@ -5,7 +5,9 @@ export default defineConfig({
   define: { 'import.meta.vitest': false },
   plugins: [tsconfigPaths()],
   test: {
-    includeSource: ['src/**/*.{ts,tsx}'],
-    exclude: ['node_modules', 'server', 'out'],
+    setupFiles: ['tests/setup.ts'],
+    includeSource: ['**/*.ts'],
+    threads: false,
+    hookTimeout: 15000,
   },
 })
