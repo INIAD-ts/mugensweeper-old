@@ -14,12 +14,13 @@ export default defineController(() => ({
       }),
     },
     handler: async ({ body }) => {
-      const clickHistories = await ClickHistoryUsecase.clickBoard({
+      const historyModel = await ClickHistoryUsecase.clickBoard({
         userId: parseUserId(body.userId),
         mouseBtn: body.mouseBtn,
         pos: body.pos,
       })
-      return { status: 201, body: clickHistories }
+
+      return { status: 200, body: historyModel }
     },
   },
 }))

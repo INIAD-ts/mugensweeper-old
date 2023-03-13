@@ -7,6 +7,6 @@ export type Methods = {
   }
   post: {
     reqBody: { userId: string; mouseBtn: MouseBtn; pos: Pos }
-    resBody: ClickHistoryModel[]
+    resBody: ClickHistoryModel | null
   }
 }
