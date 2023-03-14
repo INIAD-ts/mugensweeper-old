@@ -1,4 +1,5 @@
-import { Button, Drawer, Group, ScrollArea, Table } from '@mantine/core'
+import { Drawer, Group, ScrollArea, Table } from '@mantine/core'
+import { IconCrown } from '@tabler/icons'
 import { useState } from 'react'
 
 //デモデータ
@@ -54,7 +55,7 @@ export const RankDrawer = () => {
       </Drawer>
 
       <Group position="center">
-        <Button onClick={() => setOpened(true)}>Open Drawer</Button>
+        <IconCrown onClick={() => setOpened(true)}>Open Drawer</IconCrown>
       </Group>
     </>
   )
