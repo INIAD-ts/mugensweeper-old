@@ -19,10 +19,13 @@ export function DemoModal() {
         <br />
         ただし、爆弾のセルを開くとゲームオーバー。スコアが0になります。
         <br />
-        <Button 
-        //スペースを開けて中央揃いにする
-        style={{margin: '0 auto', display: 'block'}}
-         onClick={() => setOpened(false)}>はじめる</Button>
+        <Button
+          //スペースを開けて中央揃いにする
+          style={{ margin: '0 auto', display: 'block' }}
+          onClick={() => setOpened(false)}
+        >
+          はじめる
+        </Button>
       </Modal>
 
       <Group position="center" />

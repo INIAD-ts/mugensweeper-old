@@ -38,6 +38,7 @@ export const RankDrawer = () => {
         size="xl"
         position="right"
       >
+        {/*パラメータの調整が必要かも */}
         <ScrollArea.Autosize maxHeight={1000} sx={{ maxWidth: 400 }} mx="auto">
           <Table>
             <thead>
