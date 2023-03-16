@@ -67,23 +67,25 @@ test('クリックした履歴を取得できるかテスト', async () => {
       mouseBtn: userInputList[1].mouseBtn,
     },
   ]
-  const expectedModels2: TriedEmbedModel[] = [
-    ...aroundDirections.map(([x, y]) => ({
-      triedEmbedId: expect.any(Number),
-      hasBomb: expect.any(Boolean),
-      pos: { x: x + userInputList[0].pos.x, y: y + userInputList[0].pos.y },
-      createdAt: expect.any(Number),
-    })),
-    ...aroundDirections.map(([x, y]) => ({
-      triedEmbedId: expect.any(Number),
-      hasBomb: expect.any(Boolean),
-      pos: { x: x + userInputList[1].pos.x, y: y + userInputList[1].pos.y },
-      createdAt: expect.any(Number),
-    })),
-  ].filter(
-    (model, i, arr) =>
-      i === arr.findIndex((m) => m.pos.x === model.pos.x && m.pos.y === model.pos.y)
-  )
+  const expectedModels2: TriedEmbedModel[] =
+    //ここを
+    [
+      ...aroundDirections.map(([x, y]) => ({
+        triedEmbedId: expect.any(Number),
+        hasBomb: expect.any(Boolean),
+        pos: { x: x + userInputList[0].pos.x, y: y + userInputList[0].pos.y },
+        createdAt: expect.any(Number),
+      })),
+      ...aroundDirections.map(([x, y]) => ({
+        triedEmbedId: expect.any(Number),
+        hasBomb: expect.any(Boolean),
+        pos: { x: x + userInputList[1].pos.x, y: y + userInputList[1].pos.y },
+        createdAt: expect.any(Number),
+      })),
+    ].filter(
+      (model, i, arr) =>
+        i === arr.findIndex((m) => m.pos.x === model.pos.x && m.pos.y === model.pos.y)
+    )
 
   //実行
   for (const input of userInputList) {
