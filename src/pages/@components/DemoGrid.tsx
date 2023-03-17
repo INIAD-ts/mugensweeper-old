@@ -21,7 +21,6 @@ export const DemoGrid = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   })
-
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -66,9 +65,33 @@ export const DemoGrid = () => {
   }
   return (
     <>
-      <button onClick={() => setScale(scale * 1.2)}>拡大する</button>
-      <button onClick={() => setScale(scale / 1.2)}>縮小する</button>
       <p>{scale}</p>
+      <button
+        onClick={() =>
+          //scaleが1.4以下の時は拡大しない
+          {
+            if (scale < 1.4) {
+              setScale(scale * 1.2)
+            }
+          }
+        }
+      >
+        拡大する
+      </button>
+
+      <button
+        onClick={() =>
+          //scaleが0.7以上の時は縮小しない
+          {
+            if (scale > 0.7) {
+              setScale(scale * 0.8)
+            }
+          }
+        }
+      >
+        縮小する
+      </button>
+
       <Stage
         x={stagePos.x}
         y={stagePos.y}
