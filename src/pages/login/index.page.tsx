@@ -1,7 +1,10 @@
-import { Button, Space } from '@mantine/core'
-import { GithubIcon } from '@mantine/ds'
+import { Button, Flex, Space } from '@mantine/core'
+import { GithubIcon, TwitterIcon } from '@mantine/ds'
+import { IconBrandGoogle } from '@tabler/icons'
 import { staticPath } from 'src/utils/$path'
 import { loginWithGitHub } from 'src/utils/loginWithGitHub'
+import { loginWithGoogle } from 'src/utils/loginWithGoogle'
+import { loginWithTwitter } from 'src/utils/loginWithTwitter'
 
 const Login = () => {
   return (
@@ -25,9 +28,16 @@ const Login = () => {
           backdropFilter: 'blur(4px)',
         }}
       >
-        <div css={{ fontSize: '80px', fontWeight: 'bold', textShadow: '1px 1px white' }}>
-          next-frourio-starter
-        </div>
+        <Flex
+          css={{
+            fontSize: '48px',
+            fontWeight: 'bold',
+            color: '#fff',
+            textShadow: '0 0 8px rgb(0% 0% 0% / 50%)',
+          }}
+        >
+          mugensweeper
+        </Flex>
         <Space h={16} />
         <Button
           leftIcon={<GithubIcon size={16} />}
@@ -37,10 +47,39 @@ const Login = () => {
             '&:hover': {
               backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
             },
+            marginBottom: '8px',
           })}
           onClick={loginWithGitHub}
         >
           Login with GitHub
+        </Button>
+        <Button
+          leftIcon={<TwitterIcon size={16} />}
+          sx={(theme) => ({
+            backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            color: '#fff',
+            '&:hover': {
+              backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            },
+            marginBottom: '8px',
+          })}
+          onClick={loginWithTwitter}
+        >
+          Login with Twitter
+        </Button>
+        <Button
+          leftIcon={<IconBrandGoogle size={16} />}
+          sx={(theme) => ({
+            backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            color: '#fff',
+            '&:hover': {
+              backgroundColor: theme.colors.dark[theme.colorScheme === 'dark' ? 9 : 6],
+            },
+            marginBottom: '8px',
+          })}
+          onClick={loginWithGoogle}
+        >
+          Login with Google
         </Button>
       </div>
     </div>

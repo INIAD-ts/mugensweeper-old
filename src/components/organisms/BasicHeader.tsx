@@ -22,6 +22,7 @@ import {
   IconTrash,
 } from '@tabler/icons'
 import { useState } from 'react'
+import { RankDrawer } from 'src/pages/@components/RankDrawer'
 import { staticPath } from 'src/utils/$path'
 import { logout } from 'src/utils/loginWithGitHub'
 
@@ -124,6 +125,7 @@ export const BasicHeader = ({ user }: { user: VerifiedUser }) => {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
+          <RankDrawer />
         </Group>
       </Container>
     </div>
