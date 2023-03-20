@@ -12,7 +12,7 @@ const grid = [
 
 export const DemoGrid = () => {
   const [stagePos, setStagePos] = React.useState({ x: 0, y: 0 })
-  const [scale, setScale] = React.useState(1.0)
+  const [scale, setScale] = React.useState(1.2)
   const [windowSize, setWindowSize] = React.useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -39,56 +39,41 @@ export const DemoGrid = () => {
   useEffect(() => {
     console.log(stagePos)
   })
-  const gridComponents = []
-  let i = 0
-  for (let x = startX; x < endX; x += WIDTH) {
-    for (let y = startY; y < endY; y += HEIGHT) {
-      if (i === 4) {
-        i = 0
-      }
-
-      const indexX = Math.abs(x / WIDTH) % grid.length
-      const indexY = Math.abs(y / HEIGHT) % grid[0].length
-
-      gridComponents.push(
-        <Rect
-          key={`${x / WIDTH}-${y / HEIGHT}`}
-          x={x}
-          y={y}
-          width={WIDTH}
-          height={HEIGHT}
-          fill={grid[indexX][indexY]}
-          stroke="black"
-          onClick={() => {
-            console.log(x / WIDTH, y / HEIGHT)
-          }}
-        />
-      )
-    }
-  }
+  const gridComponents = grid.flatMap((row, rowIndex) =>
+    row.map((cell, columnIndex) => (
+      <Rect
+        key={`${rowIndex}-${columnIndex}`}
+        x={startX + columnIndex * WIDTH}
+        y={startY + rowIndex * HEIGHT}
+        width={WIDTH}
+        height={HEIGHT}
+        fill={cell}
+        stroke="black"
+        onClick={() => {
+          console.log(rowIndex, columnIndex)
+        }}
+      />
+    ))
+  )
   return (
     <>
       <p>{scale}</p>
       <button
-        onClick={() =>
-          {
-            if (scale < 1.0) {
-              setScale(scale + 0.1)
-            }
+        onClick={() => {
+          if (scale < 1.0) {
+            setScale(scale + 0.1)
           }
-        }
+        }}
       >
         拡大する
       </button>
 
       <button
-        onClick={() =>
-          {
-            if (scale > 0.1) {
-              setScale(scale - 0.1)
-            }
+        onClick={() => {
+          if (scale > 0.1) {
+            setScale(scale - 0.1)
           }
-        }
+        }}
       >
         縮小する
       </button>
@@ -101,11 +86,8 @@ export const DemoGrid = () => {
         scale={{ x: scale, y: scale }}
         draggable
         onDragEnd={(e) => {
-          const rawpos = e.currentTarget.position()
-          const fixpos = { x: 0, y: 0 }
-          fixpos.x = rawpos.x / (1 / scale)
-          fixpos.y = rawpos.y / (1 / scale)
-          setStagePos(fixpos)
+          const { x, y } = e.currentTarget.position()
+          setStagePos({ x: x * scale, y: y * scale })
         }}
       >
         <Layer>{gridComponents}</Layer>
