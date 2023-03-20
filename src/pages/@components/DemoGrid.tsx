@@ -1,8 +1,9 @@
 /* eslint-disable max-depth */
 import React, { useEffect } from 'react'
 import { Layer, Rect, Stage } from 'react-konva'
-const WIDTH = 30
-const HEIGHT = 30
+
+const WIDTH = 50
+const HEIGHT = 50
 
 const grid = [
   ['gray', 'white'],
@@ -11,16 +12,16 @@ const grid = [
 
 export const DemoGrid = () => {
   const [stagePos, setStagePos] = React.useState({ x: 0, y: 0 })
-  const startX = Math.floor((-stagePos.x - window.innerWidth) / WIDTH) * WIDTH
-  const endX = Math.floor((-stagePos.x + window.innerWidth * 2) / WIDTH) * WIDTH
-
-  const startY = Math.floor((-stagePos.y - window.innerHeight) / HEIGHT) * HEIGHT
-  const endY = Math.floor((-stagePos.y + window.innerHeight * 2) / HEIGHT) * HEIGHT
   const [scale, setScale] = React.useState(1.0)
   const [windowSize, setWindowSize] = React.useState({
     width: window.innerWidth,
     height: window.innerHeight,
   })
+  const startX = Math.floor((-stagePos.x - windowSize.width / scale) / WIDTH) * WIDTH
+  const endX = Math.floor((-stagePos.x + (windowSize.width / scale) * 2) / WIDTH) * WIDTH
+  const startY = Math.floor((-stagePos.y - windowSize.height / scale) / HEIGHT) * HEIGHT
+  const endY = Math.floor((-stagePos.y + (windowSize.height / scale) * 2) / HEIGHT) * HEIGHT
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -35,7 +36,9 @@ export const DemoGrid = () => {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
-
+  useEffect(() => {
+    console.log(stagePos)
+  })
   const gridComponents = []
   let i = 0
   for (let x = startX; x < endX; x += WIDTH) {
@@ -68,10 +71,9 @@ export const DemoGrid = () => {
       <p>{scale}</p>
       <button
         onClick={() =>
-          //scaleが1.4以下の時は拡大しない
           {
-            if (scale < 1.4) {
-              setScale(scale * 1.2)
+            if (scale < 1.0) {
+              setScale(scale + 0.1)
             }
           }
         }
@@ -81,10 +83,9 @@ export const DemoGrid = () => {
 
       <button
         onClick={() =>
-          //scaleが0.7以上の時は縮小しない
           {
-            if (scale > 0.7) {
-              setScale(scale * 0.8)
+            if (scale > 0.1) {
+              setScale(scale - 0.1)
             }
           }
         }
@@ -100,7 +101,11 @@ export const DemoGrid = () => {
         scale={{ x: scale, y: scale }}
         draggable
         onDragEnd={(e) => {
-          setStagePos(e.currentTarget.position())
+          const rawpos = e.currentTarget.position()
+          const fixpos = { x: 0, y: 0 }
+          fixpos.x = rawpos.x / (1 / scale)
+          fixpos.y = rawpos.y / (1 / scale)
+          setStagePos(fixpos)
         }}
       >
         <Layer>{gridComponents}</Layer>
