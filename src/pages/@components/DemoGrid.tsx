@@ -39,22 +39,33 @@ export const DemoGrid = () => {
   useEffect(() => {
     console.log(stagePos)
   })
-  const gridComponents = grid.flatMap((row, rowIndex) =>
-    row.map((cell, columnIndex) => (
-      <Rect
-        key={`${rowIndex}-${columnIndex}`}
-        x={startX + columnIndex * WIDTH}
-        y={startY + rowIndex * HEIGHT}
-        width={WIDTH}
-        height={HEIGHT}
-        fill={cell}
-        stroke="black"
-        onClick={() => {
-          console.log(rowIndex, columnIndex)
-        }}
-      />
-    ))
-  )
+  const gridComponents = []
+  let i = 0
+  for (let x = startX; x < endX; x += WIDTH) {
+    for (let y = startY; y < endY; y += HEIGHT) {
+      if (i === 4) {
+        i = 0
+      }
+
+      const indexX = Math.abs(x / WIDTH) % grid.length
+      const indexY = Math.abs(y / HEIGHT) % grid[0].length
+
+      gridComponents.push(
+        <Rect
+          key={`${x / WIDTH}-${y / HEIGHT}`}
+          x={x}
+          y={y}
+          width={WIDTH}
+          height={HEIGHT}
+          fill={grid[indexX][indexY]}
+          stroke="black"
+          onClick={() => {
+            console.log(x / WIDTH, y / HEIGHT)
+          }}
+        />
+      )
+    }
+  }
   return (
     <>
       <p>{scale}</p>
