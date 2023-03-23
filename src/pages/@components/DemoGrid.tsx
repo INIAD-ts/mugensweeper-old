@@ -12,7 +12,7 @@ const grid = [
 
 export const DemoGrid = () => {
   const [stagePos, setStagePos] = React.useState({ x: 0, y: 0 })
-  const [scale, setScale] = React.useState(1.2)
+  const [scale, setScale] = React.useState(1.0)
   const [windowSize, setWindowSize] = React.useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -101,7 +101,9 @@ export const DemoGrid = () => {
           setStagePos({ x: x * scale, y: y * scale })
         }}
       >
-        <Layer>{gridComponents}</Layer>
+        <Layer buffered throttle={500}>
+          {gridComponents}
+        </Layer>
       </Stage>
     </>
   )
