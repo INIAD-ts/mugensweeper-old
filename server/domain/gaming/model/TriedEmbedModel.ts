@@ -11,6 +11,7 @@ export type TriedEmbedModel = {
 
 type CreationParams = { triedEmbedId: number; pos: Pos; hasBomb: boolean }
 
+//tapしたところの周りの座標
 export const aroundDirections: (readonly [number, number])[] = [-1, 0, 1]
   .flatMap((x, _, arr) => arr.map((y) => [x, y] as const))
   .filter(([x, y]) => x !== 0 || y !== 0)
