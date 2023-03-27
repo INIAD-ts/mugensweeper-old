@@ -1,5 +1,5 @@
-import { parseUserId } from '$/types/parseBranded'
-import { ClickHistoryUsecase } from 'allen/domain/gaming/usecase/ClickHistoryUsecase'
+import { GamingUseCase } from '$/domain/gaming/usecase/GamingUsecase'
+import { userIdParser } from '$/types/parseBranded'
 import { z } from 'zod'
 import { defineController } from './$relay'
 
@@ -8,18 +8,19 @@ export default defineController(() => ({
   post: {
     validators: {
       body: z.object({
-        userId: z.string().brand<'UserId'>(),
+        userId: userIdParser,
         mouseBtn: z.enum(['left', 'right']),
         pos: z.object({ x: z.number().int(), y: z.number().int() }),
       }),
     },
     handler: async ({ body }) => {
-      const clickHistories = await ClickHistoryUsecase.clickBoard({
-        userId: parseUserId(body.userId),
+      const historyModel = await GamingUseCase.clickBoard({
+        userId: userIdParser.parse(body.userId),
         mouseBtn: body.mouseBtn,
         pos: body.pos,
       })
-      return { status: 201, body: clickHistories }
+
+      return { status: 200, body: historyModel }
     },
   },
 }))
