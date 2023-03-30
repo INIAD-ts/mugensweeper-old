@@ -1,15 +1,15 @@
 import type { ClickHistoryModel } from '$/domain/gaming/model/ClickHistoryModel'
-import type { TriedEmbedModel } from '$/domain/gaming/model/TriedEmbedModel'
-import { aroundDirections } from '$/domain/gaming/model/TriedEmbedModel'
 import { ClickHistoryRepository } from '$/domain/gaming/repository/ClickHistoryRepository'
+import { TriedEmbedRepository } from '$/domain/gaming/repository/TriedEmbedRepository'
 import { GamingUseCase } from '$/domain/gaming/usecase/GamingUsecase'
 import { UserUsecase } from '$/domain/user/usecase/UserUsecase'
 import {
+  aroundDirections,
   createExpectedClickHistories,
   createUserInputsFromBoard,
   partsToClickedCells,
 } from '$/tests/domain/usecase/testUtils'
-import type { Board, EmbedCell, UserInput } from '$/tests/domain/usecase/types'
+import type { Board, EmbedCell, TriedEmbedModel, UserInput } from '$/tests/domain/usecase/types'
 import { userIdParser } from '$/types/parseBranded'
 import { randomUUID } from 'crypto'
 import { expect, test } from 'vitest'
@@ -50,7 +50,10 @@ test('クリックした履歴を取得できるかのテスト', async () => {
       mouseBtn: 'left',
     },
   ])
-  const B: EmbedCell = { type: 'embed' }
+  const B: EmbedCell = {
+    type: 'embed',
+    index: 0,
+  }
 
   //prettier-ignore
   const board: Board = [
@@ -83,6 +86,52 @@ test('クリックした履歴を取得できるかのテスト', async () => {
     },
   ]
 
+  const result1 = await ClickHistoryRepository.findAll()
+  expect(result1).toEqual(expectedModels1)
+})
+
+test('ユーザーのクリックした周囲にボムが配置されたか確認するテスト', async () => {
+  const userTaro = await registerUser('太郎')
+  const [A, C] = partsToClickedCells([
+    {
+      userId: userTaro.userId,
+      mouseBtn: 'left',
+    },
+    {
+      userId: userTaro.userId,
+      mouseBtn: 'left',
+    },
+  ])
+  const B: EmbedCell = { type: 'embed', index: 0 }
+
+  //prettier-ignore
+  const board: Board = [
+  [0, 0, 0, 0, 0],
+  [0, 0, B, B, B],
+  [0, 0, B, C, B],
+  [B, B, B, B, B],
+  [B, A, B, 0, 0],
+  [B, B, B, 0, 0],
+]
+  const userInputs = createUserInputsFromBoard(board)
+
+  const expectedModels1 = [
+    {
+      TriedEmbedId: expect.any(Number),
+      pos: userInputs[0].pos,
+      hasBomb: expect.any(Boolean),
+      //jestあいまいな型比較
+
+      createdAt: expect.any(Number),
+    },
+    {
+      TriedEmbedId: expect.any(Number),
+      pos: userInputs[1].pos,
+      hasBomb: expect.any(Boolean),
+      //jestあいまいな型比較
+      createdAt: expect.any(Number),
+    },
+  ]
   const expectedModels2: TriedEmbedModel[] = [
     ...aroundDirections.map(([x, y]) => ({
       triedEmbedId: expect.any(Number),
@@ -104,10 +153,8 @@ test('クリックした履歴を取得できるかのテスト', async () => {
   for (const input of userInputs) {
     await GamingUseCase.clickBoard(input)
   }
-
-  const result1 = await ClickHistoryRepository.findAll()
-  //const result2 = await TriedEmbedRepository.findAll()
-  expect(result1).toEqual(expectedModels1)
+  const testResult = await TriedEmbedRepository.findAll()
+  expect(testResult).toEqual(expectedModels2)
 })
 
 test('同じところタッチした時に結果をdatabaseに送らない', async () => {

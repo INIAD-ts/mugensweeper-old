@@ -1,20 +1,9 @@
-import type { TriedEmbedId } from '$/types/branded'
+import { aroundDirections } from '$/tests/domain/usecase/testUtils'
+import type { CreationParams, TriedEmbedModel } from '$/tests/domain/usecase/types'
 import { triedEmbedIdParser } from '$/types/parseBranded'
 import type { Pos } from '../valueObject/Pos'
 
-export type TriedEmbedModel = {
-  triedEmbedId: TriedEmbedId
-  pos: Pos
-  hasBomb: boolean
-  createdAt: number
-}
-
-type CreationParams = { triedEmbedId: number; pos: Pos; hasBomb: boolean }
-
 //tapしたところの周りの座標
-export const aroundDirections: (readonly [number, number])[] = [-1, 0, 1]
-  .flatMap((x, _, arr) => arr.map((y) => [x, y] as const))
-  .filter(([x, y]) => x !== 0 || y !== 0)
 
 const BOMB_BORN_RATIO = 20
 export const triedEmbedModelUtil = {

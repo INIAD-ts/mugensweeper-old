@@ -16,7 +16,10 @@ test('createUserInputsFromBoardの結果をテスト', () => {
     { userId: userTaroId, mouseBtn: 'left' },
     { userId: userTaroId, mouseBtn: 'right' },
   ])
-  const B: EmbedCell = { type: 'embed' }
+  const B: EmbedCell = {
+    type: 'embed',
+    index: 0,
+  }
 
   //prettier-ignore
   const board:Board = [

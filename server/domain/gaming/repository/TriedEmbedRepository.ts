@@ -1,6 +1,6 @@
 import { getPrismaClient } from '$/service/getPrismaClient'
+import type { TriedEmbedModel } from '$/tests/domain/usecase/types'
 import { triedEmbedIdParser } from '$/types/parseBranded'
-import type { TriedEmbedModel } from '../model/TriedEmbedModel'
 
 export const TriedEmbedRepository = {
   findAll: () =>
