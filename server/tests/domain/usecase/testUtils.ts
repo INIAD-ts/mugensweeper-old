@@ -47,34 +47,21 @@ export const createExpectedClickHistories = (board: Board): ClickHistoryModel[] 
     .sort((a, b) => a.index - b.index)
     .map(({ index, ...model }) => model)
 
-const BOMB_PROBABILITYS = 20
-const data = () => {
-  const a = Math.floor(Math.random() * 100)
-  if (a < BOMB_PROBABILITYS) {
-    return true
-  }
-  return false
-}
-
 export const createExpectedTriedEmbeds = (board: Board): TriedEmbedModel[] =>
-  board
-    .flatMap((row, y) =>
-      row.flatMap((cell, x) =>
-        cell !== 0 && cell.type === 'clicked'
-          ? [
-              {
-                triedEmbedId: expect.any(Number),
-                pos: { x, y: board.length - y - 1 },
-                hasBomb: data(),
-                createdAt: expect.any(Number),
-                index: cell.index,
-              },
-            ]
-          : []
-      )
+  board.flatMap((row, y) =>
+    row.flatMap((cell, x) =>
+      cell !== 0 && cell.type === 'embed'
+        ? [
+            {
+              triedEmbedId: expect.any(Number),
+              pos: { x, y: board.length - y - 1 },
+              hasBomb: expect.any(Boolean),
+              createdAt: expect.any(Number),
+            },
+          ]
+        : []
     )
-    .sort((a, b) => a.index - b.index)
-    .map(({ index, ...model }) => model)
+  )
 
 export const aroundDirections: (readonly [number, number])[] = [-1, 0, 1]
   .flatMap((x, _, arr) => arr.map((y) => [x, y] as const))

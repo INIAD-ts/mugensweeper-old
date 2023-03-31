@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     setupFiles: ['tests/setup.ts'],
     includeSource: ['**/*.ts'],
+    //=>にマッチするファイルだけtest include: ['**/testUtils.test.ts'],
     threads: false,
     hookTimeout: 15000,
   },

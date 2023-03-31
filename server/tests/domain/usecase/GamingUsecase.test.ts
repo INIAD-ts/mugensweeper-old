@@ -4,8 +4,8 @@ import { TriedEmbedRepository } from '$/domain/gaming/repository/TriedEmbedRepos
 import { GamingUseCase } from '$/domain/gaming/usecase/GamingUsecase'
 import { UserUsecase } from '$/domain/user/usecase/UserUsecase'
 import {
-  aroundDirections,
   createExpectedClickHistories,
+  createExpectedTriedEmbeds,
   createUserInputsFromBoard,
   partsToClickedCells,
 } from '$/tests/domain/usecase/testUtils'
@@ -30,10 +30,13 @@ const registerUser = (name: string) =>
     photoUrl: 'http://example.com',
   })
 
-const expectToEqualTriedEmbedModels = (result: TriedEmbedModel[], expected: TriedEmbedModel[]) => {
+const expectToContainEqualTriedEmbedsModel = (
+  result: TriedEmbedModel[],
+  expected: TriedEmbedModel[]
+) => {
   expect(result).toHaveLength(expected.length)
-  result.forEach((historyModel, i) => {
-    expect(historyModel).toEqual<TriedEmbedModel>(expected[i])
+  expected.forEach((expectedModel, i) => {
+    expect(result).toContainEqual(expectedModel)
   })
 }
 
@@ -67,94 +70,16 @@ test('クリックした履歴を取得できるかのテスト', async () => {
   const userInputs = createUserInputsFromBoard(board)
   //上の中から正当なのを入れる。バグなどを防ぐための綺麗なやつ
   const expectedClickHistories = createExpectedClickHistories(board)
-  const expectedModels1 = [
-    {
-      ClickHistoryId: expect.any(Number),
-      userId: userTaro.userId,
-      pos: userInputs[0].pos,
-      //jestあいまいな型比較
-      createdAt: expect.any(Number),
-      mouseBtn: userInputs[0].mouseBtn,
-    },
-    {
-      ClickHistoryId: expect.any(Number),
-      userId: userTaro.userId,
-      pos: userInputs[1].pos,
-      //jestあいまいな型比較
-      createdAt: expect.any(Number),
-      mouseBtn: userInputs[1].mouseBtn,
-    },
-  ]
-
-  const result1 = await ClickHistoryRepository.findAll()
-  expect(result1).toEqual(expectedModels1)
-})
-
-test('ユーザーのクリックした周囲にボムが配置されたか確認するテスト', async () => {
-  const userTaro = await registerUser('太郎')
-  const [A, C] = partsToClickedCells([
-    {
-      userId: userTaro.userId,
-      mouseBtn: 'left',
-    },
-    {
-      userId: userTaro.userId,
-      mouseBtn: 'left',
-    },
-  ])
-  const B: EmbedCell = { type: 'embed', index: 0 }
-
-  //prettier-ignore
-  const board: Board = [
-  [0, 0, 0, 0, 0],
-  [0, 0, B, B, B],
-  [0, 0, B, C, B],
-  [B, B, B, B, B],
-  [B, A, B, 0, 0],
-  [B, B, B, 0, 0],
-]
-  const userInputs = createUserInputsFromBoard(board)
-
-  const expectedModels1 = [
-    {
-      TriedEmbedId: expect.any(Number),
-      pos: userInputs[0].pos,
-      hasBomb: expect.any(Boolean),
-      //jestあいまいな型比較
-
-      createdAt: expect.any(Number),
-    },
-    {
-      TriedEmbedId: expect.any(Number),
-      pos: userInputs[1].pos,
-      hasBomb: expect.any(Boolean),
-      //jestあいまいな型比較
-      createdAt: expect.any(Number),
-    },
-  ]
-  const expectedModels2: TriedEmbedModel[] = [
-    ...aroundDirections.map(([x, y]) => ({
-      triedEmbedId: expect.any(Number),
-      hasBomb: expect.any(Boolean),
-      pos: { x: x + userInputs[0].pos.x, y: y + userInputs[0].pos.y },
-      createdAt: expect.any(Number),
-    })),
-    ...aroundDirections.map(([x, y]) => ({
-      triedEmbedId: expect.any(Number),
-      hasBomb: expect.any(Boolean),
-      pos: { x: x + userInputs[1].pos.x, y: y + userInputs[1].pos.y },
-      createdAt: expect.any(Number),
-    })),
-  ].filter(
-    (model, i, arr) =>
-      i === arr.findIndex((m) => m.pos.x === model.pos.x && m.pos.y === model.pos.y)
-  )
+  const expectTriedEmbeds: TriedEmbedModel[] = createExpectedTriedEmbeds(board)
 
   for (const input of userInputs) {
     await GamingUseCase.clickBoard(input)
   }
-  const testResult = await TriedEmbedRepository.findAll()
-  expect(testResult).toEqual(expectedModels2)
+
+  const result1 = await ClickHistoryRepository.findAll()
+  const result2 = await TriedEmbedRepository.findAll()
+  expectToEqualClickHistoryModels(result1, expectedClickHistories)
+  expectToContainEqualTriedEmbedsModel(result2, expectTriedEmbeds)
 })
 
 test('同じところタッチした時に結果をdatabaseに送らない', async () => {
@@ -190,7 +115,6 @@ test('同じところタッチした時に結果をdatabaseに送らない', asy
   }
 
   const result = await ClickHistoryRepository.findAll()
-
   //検証
   expectToEqualClickHistoryModels(result, expectedModels)
 })

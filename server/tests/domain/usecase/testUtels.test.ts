@@ -1,10 +1,11 @@
 import type { ClickHistoryModel } from '$/domain/gaming/model/ClickHistoryModel'
 import {
   createExpectedClickHistories,
+  createExpectedTriedEmbeds,
   createUserInputsFromBoard,
   partsToClickedCells,
 } from '$/tests/domain/usecase/testUtils'
-import type { Board, ClickedCell, EmbedCell } from '$/tests/domain/usecase/types'
+import type { Board, ClickedCell, EmbedCell, TriedEmbedModel } from '$/tests/domain/usecase/types'
 import { userIdParser } from '$/types/parseBranded'
 import { randomUUID } from 'crypto'
 import { expect, test } from 'vitest'
@@ -51,40 +52,121 @@ test('createUserInputsFromBoardの結果をテスト', () => {
 
   expect(clickHistories).toEqual(expectedModels)
 })
-/*
-const expectedList: UserInput[] = [
-  { userId: userTaroId, mouseBtn: 'left', pos: { x: 1, y: 1 } },
-  { userId: userTaroId, mouseBtn: 'right', pos: { x: 3, y: 3 } },
-]
 
-  const userInputList: UserInput[] = [
-    { userId: userTaroId, mouseBtn: 'right', pos: { x: 3, y: 1 } },
-    { userId: userTaroId, mouseBtn: 'left', pos: { x: 3, y: 3 } },
-  ]
-  */
-/*
-  expect(userInputs).toEqual(expectedList)
-  //上の中から正当なのを入れる。バグなどを防ぐための綺麗なやつ
-  const expectedModels: ClickHistoryModel[] = [
+test('createExpectedTriedEmbed', async () => {
+  //前提条件として悪意の攻撃と正当なリクエスト
+  const userTaroId = userIdParser.parse(randomUUID())
+  const [A, C]: ClickedCell[] = partsToClickedCells([
+    { userId: userTaroId, mouseBtn: 'left' },
+    { userId: userTaroId, mouseBtn: 'right' },
+  ])
+  const B: EmbedCell = {
+    type: 'embed',
+    index: 0,
+  }
+
+  //prettier-ignore
+  const board:Board = [
+      [0, 0, 0, 0, 0],
+      [0, 0, B, B, B],
+      [0, 0, B, C, B],
+      [B, B, B, B, B],
+      [B, A, B, 0, 0],
+      [B, B, B, 0, 0],
+    ]
+  const userInputs = createUserInputsFromBoard(board)
+  const triedeEmbeds = createExpectedTriedEmbeds(board)
+  const expectedModels2: TriedEmbedModel[] = [
     {
-      ClickHistoryId: expect.any(Number),
-      userId: userTaroId,
-      pos: userInputList[0].pos,
-      //jestあいまいな型比較
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 2, y: 4 },
       createdAt: expect.any(Number),
-      mouseBtn: userInputList[0].mouseBtn,
     },
     {
-      ClickHistoryId: expect.any(Number),
-      userId: userTaroId,
-      pos: userInputList[1].pos,
-      //jestあいまいな型比較
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 3, y: 4 },
       createdAt: expect.any(Number),
-      mouseBtn: userInputList[1].mouseBtn,
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 4, y: 4 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 2, y: 3 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 4, y: 3 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 0, y: 2 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 1, y: 2 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 2, y: 2 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 3, y: 2 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 4, y: 2 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 0, y: 1 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 2, y: 1 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 0, y: 0 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 1, y: 0 },
+      createdAt: expect.any(Number),
+    },
+    {
+      triedEmbedId: expect.any(Number),
+      hasBomb: expect.any(Boolean),
+      pos: { x: 2, y: 0 },
+      createdAt: expect.any(Number),
     },
   ]
-  expect(userInputs).toEqual(expectedList)
-
-  //上の中から正当なのを入れる。バグなどを防ぐための綺麗なやつ
+  expect(triedeEmbeds).toEqual(expectedModels2)
 })
-*/

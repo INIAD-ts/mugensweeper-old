@@ -8,20 +8,27 @@ import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 
 let server: FastifyInstance
 
-beforeAll(async () => {
+const unneededServer = (file: { filepath?: string } | undefined) =>
+  !file?.filepath?.endsWith('Usecase.test.ts')
+beforeAll(async (info) => {
+  if (unneededServer(info)) return
   server = init()
   await server.listen({ port: PORT, host: '0.0.0.0' })
 })
 
-beforeEach(async () => {
+beforeEach(async (info) => {
+  if (unneededServer(info.meta.file)) return
+
   await util.promisify(exec)('npx prisma migrate reset --force')
   await util.promisify(exec)('npx prisma db seed')
 })
 
-afterEach(async () => {
+afterEach(async (info) => {
+  if (unneededServer(info.meta.file)) return
   await getPrismaClient().$disconnect()
 })
 
-afterAll(async () => {
+afterAll(async (info) => {
+  if (unneededServer(info)) return
   await server.close()
 })

@@ -12,6 +12,7 @@ export type ClickedCell = {
 export type EmbedCell = { type: 'embed'; index: number }
 
 export type Board = (0 | ClickedCell | EmbedCell)[][]
+export type ConpactBoard = (Board | 0)[][]
 export type UserInput = {
   userId: UserId
   mouseBtn: MouseBtn
